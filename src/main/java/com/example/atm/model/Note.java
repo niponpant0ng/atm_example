@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -15,7 +16,9 @@ import java.io.Serializable;
 public class Note implements Serializable {
 
     @Id
+    @NotNull
     Integer amount;
 
+    @NotNull
     Integer counting;
 }

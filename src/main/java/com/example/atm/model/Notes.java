@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Getter
@@ -12,5 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonRootName(value = "notes")
 public class Notes {
+
+    @Valid
     List<Note> notes;
 }
