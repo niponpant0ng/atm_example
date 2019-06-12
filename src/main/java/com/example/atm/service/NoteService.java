@@ -4,6 +4,7 @@ import com.example.atm.model.Note;
 import com.example.atm.reposistory.NoteReposistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,7 +17,8 @@ public class NoteService {
         this.noteReposistory = noteReposistory;
     }
 
+    @Transactional
     public List<Note> initNotes(List<Note> notes) {
-        return null;
+        return noteReposistory.saveAll(notes);
     }
 }
