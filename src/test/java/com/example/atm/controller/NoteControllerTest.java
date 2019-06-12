@@ -51,8 +51,7 @@ public class NoteControllerTest {
     @Test
     public void shouldNotInitNotesWhenBodyRequestIsEmpty() throws Exception {
         MockHttpServletRequestBuilder request = post("/notes")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString())
-                .content("");
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status().isBadRequest());
     }
