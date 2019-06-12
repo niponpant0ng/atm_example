@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonRootName(value = "notes")
-public class Notes {
+public class Notes implements Serializable {
 
     @Valid
     List<Note> notes;
