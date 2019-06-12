@@ -21,4 +21,8 @@ public class NoteService {
     public List<Note> initNotes(List<Note> notes) {
         return noteReposistory.saveAll(notes);
     }
+
+    public List<Note> getNotes() {
+        return noteReposistory.findAll();
+    }
 }

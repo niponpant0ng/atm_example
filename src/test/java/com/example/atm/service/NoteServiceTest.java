@@ -35,4 +35,13 @@ public class NoteServiceTest {
         ListAssert.assertEquals(initNotes, savedNotes);
     }
 
+    @Test
+    public void shouldGetNotes() {
+        List<Note> repNotes = Arrays.asList(new Note(100, 4), new Note(50, 2));
+        doReturn(repNotes).when(noteReposistory).findAll();
+
+        List<Note> notes = noteService.getNotes();
+
+        ListAssert.assertEquals(notes, repNotes);
+    }
 }

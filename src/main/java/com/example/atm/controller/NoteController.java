@@ -7,16 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/notes", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/notes", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Slf4j
 @Validated
 public class NoteController {
@@ -28,9 +25,15 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Notes initNotes(@Valid @RequestBody Notes notes) {
         List<Note> initNotes = noteService.initNotes(notes.getNotes());
         return new Notes(initNotes);
+    }
+
+    @GetMapping
+    public Notes getNotes() {
+        List<Note> notes = noteService.getNotes();
+        return new Notes(notes);
     }
 }

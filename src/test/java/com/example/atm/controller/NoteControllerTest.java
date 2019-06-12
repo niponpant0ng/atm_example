@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -108,5 +109,18 @@ public class NoteControllerTest {
 
         ListAssert.assertContains(noteArgCaptor.getValue(), new Note(100, 5));
         ListAssert.assertContains(noteArgCaptor.getValue(), new Note(50, 2));
+    }
+
+    @Test
+    public void shouldGetNotes() throws Exception {
+        List<Note> notes = Collections.singletonList(new Note(100, 10));
+        doReturn(notes).when(noteService).getNotes();
+
+        MockHttpServletRequestBuilder request = get("/notes");
+
+        mvc.perform(request)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.notes[0].amount", CoreMatchers.is(100)))
+            .andExpect(jsonPath("$.notes[0].counting", CoreMatchers.is(10)));
     }
 }
