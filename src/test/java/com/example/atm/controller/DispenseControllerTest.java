@@ -31,6 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class DispenseControllerTest {
 
+    private final String URL = "/dispense/%d";
+
     @MockBean
     private DispenseService dispenseService;
 
@@ -50,7 +52,7 @@ public class DispenseControllerTest {
         Integer amount = 150;
         doThrow(new AvailableNoteEmptyException()).when(dispenseService).dispense(amount);
 
-        MockHttpServletRequestBuilder request = get(String.format("/dispense/%d", amount))
+        MockHttpServletRequestBuilder request = get(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status()
@@ -63,7 +65,7 @@ public class DispenseControllerTest {
         Integer amount = 150;
         doThrow(new AvailableNoteNotCoverException()).when(dispenseService).dispense(amount);
 
-        MockHttpServletRequestBuilder request = get(String.format("/dispense/%d", amount))
+        MockHttpServletRequestBuilder request = get(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status()
@@ -77,7 +79,7 @@ public class DispenseControllerTest {
         List<Note> notes = Arrays.asList(new Note(100, 1), new Note(50, 1));
         doReturn(notes).when(dispenseService).dispense(amount);
 
-        MockHttpServletRequestBuilder request = get(String.format("/dispense/%d", amount))
+        MockHttpServletRequestBuilder request = get(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request)
