@@ -1,7 +1,7 @@
 package com.example.atm.service;
 
 import com.example.atm.model.Note;
-import com.example.atm.reposistory.NoteReposistory;
+import com.example.atm.reposistory.NoteRepository;
 import junitx.framework.ListAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.doReturn;
 @DataJpaTest
 public class NoteServiceTest {
     @Mock
-    private NoteReposistory noteReposistory;
+    private NoteRepository noteRepository;
 
     @InjectMocks
     private NoteService noteService;
@@ -28,7 +28,7 @@ public class NoteServiceTest {
     public void shouldInitNotesWithNoteList() {
         List<Note> savedNotes = Arrays.asList(new Note(100, 2), new Note(50, 1));
         List<Note> notes = Arrays.asList(new Note(100, 4), new Note(50, 2));
-        doReturn(savedNotes).when(noteReposistory).saveAll(notes);
+        doReturn(savedNotes).when(noteRepository).saveAll(notes);
 
         List<Note> initNotes = noteService.initNotes(notes);
 
@@ -38,7 +38,7 @@ public class NoteServiceTest {
     @Test
     public void shouldGetNotes() {
         List<Note> repNotes = Arrays.asList(new Note(100, 4), new Note(50, 2));
-        doReturn(repNotes).when(noteReposistory).findAll();
+        doReturn(repNotes).when(noteRepository).findAll();
 
         List<Note> notes = noteService.getNotes();
 
