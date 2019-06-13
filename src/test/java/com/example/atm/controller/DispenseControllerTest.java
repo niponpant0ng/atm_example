@@ -2,6 +2,7 @@ package com.example.atm.controller;
 
 import com.example.atm.config.exception.AvailableNoteEmptyException;
 import com.example.atm.config.exception.AvailableNoteNotCoverException;
+import com.example.atm.config.exception.InValidDispenseAmount;
 import com.example.atm.model.Note;
 import com.example.atm.service.DispenseService;
 import org.hamcrest.CoreMatchers;
@@ -50,6 +51,19 @@ public class DispenseControllerTest {
     @Test
     public void shouldNotDispenseWhenAmountIsLessThanDispenseAmount() throws Exception {
         MockHttpServletRequestBuilder request = get("/dispense/-500")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
+
+        mvc.perform(request).andExpect(status()
+                .isBadRequest())
+                .andExpect(jsonPath("$.message", CoreMatchers.is("Amount not valid value")));
+    }
+
+    @Test
+    public void shouldNotDispenseWhenAmountIsNotCoverWithAvailableNotes() throws Exception {
+        Integer amount = 150;
+        doThrow(new InValidDispenseAmount()).when(dispenseService).dispense(amount);
+
+        MockHttpServletRequestBuilder request = get(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status()
