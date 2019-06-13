@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -21,4 +22,16 @@ public class Note implements Serializable {
 
     @NotNull
     Integer counting;
+
+    @Transient
+    public Integer calcAvailableCounting(Integer amount) {
+        int noteCounting = (int) amount / this.amount;
+
+        if(noteCounting > this.counting) {
+            noteCounting = this.counting;
+        }
+
+        return noteCounting;
+    }
+
 }
