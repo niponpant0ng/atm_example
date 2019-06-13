@@ -13,7 +13,12 @@
 
 **spring-fox-swagger** use for create swagger doc
 
-# Endpoint of ATM Application
+# Endpoint Form of ATM Application
+GET /form/dispenseForm = display dispense form
+
+GET /form/initNotes = display init notes form
+
+# Endpoint Service of ATM Application
 GET /notes = list notes in atm application
 
 POST /notes = insert or update counting of notes in atm application
