@@ -48,6 +48,16 @@ public class DispenseControllerTest {
     }
 
     @Test
+    public void shouldNotDispenseWhenAmountIsLessThanDispenseAmount() throws Exception {
+        MockHttpServletRequestBuilder request = get("/dispense/-500")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
+
+        mvc.perform(request).andExpect(status()
+                .isBadRequest())
+                .andExpect(jsonPath("$.message", CoreMatchers.is("Amount not valid value")));
+    }
+
+    @Test
     public void shouldNotDispenseWhenAvailableNotesAreEmpty() throws Exception {
         Integer amount = 150;
         doThrow(new AvailableNoteEmptyException()).when(dispenseService).dispense(amount);

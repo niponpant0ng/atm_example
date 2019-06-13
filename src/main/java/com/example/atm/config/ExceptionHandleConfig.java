@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class ExceptionHandleConfig extends ResponseEntityExceptionHandler {
@@ -28,5 +29,10 @@ public class ExceptionHandleConfig extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AvailableNoteNotCoverException.class)
     public ResponseEntity<String> availableNoteNotCover(HttpServletRequest req, Exception ex) throws JsonProcessingException {
         return new ResponseEntity<>(objectMapper.writeValueAsString(new ExceptionMessage("Available note not cover dispense amount")), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> notValidAmount(HttpServletRequest req, Exception ex) throws JsonProcessingException {
+        return new ResponseEntity<>(objectMapper.writeValueAsString(new ExceptionMessage("Amount not valid value")), HttpStatus.BAD_REQUEST);
     }
 }
