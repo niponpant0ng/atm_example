@@ -11,4 +11,9 @@ public class AtmFormController {
     public String showInitNotesForm() {
         return "initNote";
     }
+
+    @GetMapping("/dispenseForm")
+    public String showDispenseForm() {
+        return "dispenseForm";
+    }
 }

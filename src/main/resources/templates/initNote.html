@@ -6,9 +6,9 @@
   </head>
 
   <body>
+    <a href="/form/dispenseForm">Go to Dispense Page</a>
     <div class="container">
-      <span id="noteInputs">
-      </span>
+      <span id="noteInputs"></span>
       <div class="row">
         <div class="col-lg-12 offset-lg-5">
           <button id="saveBtn">Save</button>
@@ -34,16 +34,23 @@
           return n.amount !== 0 && n.counting !== 0;
         });
 
+        if(saveNotes.length === 0) {
+          alert('Notes are empty');
+          return;
+        }
+
         axios.post('/notes', {"notes": saveNotes})
           .then(function () {
-            notes = saveNotes.slice();
+            notes = [initNote()];
             render();
 
-            alert("Save Success with amount and counting is not 0");
+            alert("Save Success with amount and counting are not 0");
           })
           .catch(function (e) {
             notes = saveNotes.slice();
-            alert("Save Error");
+            const errMsg = e.response.data.message;
+
+            alert(errMsg? errMsg: 'Save error');
           });
       });
     });
@@ -53,15 +60,13 @@
     function render() {
         $("#noteInputs").empty();
         notes.forEach(function myFunction(item, index) {
-          const template = `<div class="container">
-                <div class="row" id="note${index}">
+          const template = `<div class="row" id="note${index}">
                   <div class="col-lg-2 offset-lg-3">Amount:</div>
                   <div class="col-lg-2"><input id="amount${index}" onblur="changeAmount(${index})" value="${item.amount}"/></div>
                   <div class="col-lg-2">Counting:</div>
                   <div class="col-lg-2"><input id="counting${index}" onblur="changeCounting(${index})" value="${item.counting}"/></div>
                   <div class="col-lg-2"><button onclick="removeNote(${index})">Remove</button></div>
-                </div>
-              </div>`;
+                </div>`;
           $("#noteInputs").append(template);
         });
       }
