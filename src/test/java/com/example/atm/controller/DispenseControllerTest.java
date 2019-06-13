@@ -23,7 +23,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,7 +42,7 @@ public class DispenseControllerTest {
 
     @Test
     public void shouldNotDispenseWhenAmountIsNotNumber() throws Exception {
-        MockHttpServletRequestBuilder request = get("/dispense/xxx")
+        MockHttpServletRequestBuilder request = post("/dispense/xxx")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status().isBadRequest());
@@ -50,7 +50,7 @@ public class DispenseControllerTest {
 
     @Test
     public void shouldNotDispenseWhenAmountIsLessThanDispenseAmount() throws Exception {
-        MockHttpServletRequestBuilder request = get("/dispense/-500")
+        MockHttpServletRequestBuilder request = post("/dispense/-500")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status()
@@ -63,7 +63,7 @@ public class DispenseControllerTest {
         Integer amount = 150;
         doThrow(new InValidDispenseAmount()).when(dispenseService).dispense(amount);
 
-        MockHttpServletRequestBuilder request = get(String.format(URL, amount))
+        MockHttpServletRequestBuilder request = post(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status()
@@ -76,7 +76,7 @@ public class DispenseControllerTest {
         Integer amount = 150;
         doThrow(new AvailableNoteEmptyException()).when(dispenseService).dispense(amount);
 
-        MockHttpServletRequestBuilder request = get(String.format(URL, amount))
+        MockHttpServletRequestBuilder request = post(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status()
@@ -89,7 +89,7 @@ public class DispenseControllerTest {
         Integer amount = 150;
         doThrow(new AvailableNoteNotCoverException()).when(dispenseService).dispense(amount);
 
-        MockHttpServletRequestBuilder request = get(String.format(URL, amount))
+        MockHttpServletRequestBuilder request = post(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request).andExpect(status()
@@ -103,7 +103,7 @@ public class DispenseControllerTest {
         List<Note> notes = Arrays.asList(new Note(100, 1), new Note(50, 1));
         doReturn(notes).when(dispenseService).dispense(amount);
 
-        MockHttpServletRequestBuilder request = get(String.format(URL, amount))
+        MockHttpServletRequestBuilder request = post(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
         mvc.perform(request)
