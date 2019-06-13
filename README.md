@@ -11,6 +11,7 @@
 
 **junit-addons** use for assert list data type in test case
 
+**spring-fox-swagger** use for create swagger doc
 
 # Endpoint of ATM Application
 GET /notes = list notes in atm application
@@ -18,6 +19,8 @@ GET /notes = list notes in atm application
 POST /notes = insert or update counting of notes in atm application
 
 POST /dispense/{amount} = dispense amount in atm application
+
+or using this **<IP>:<PORT>/swagger-ui.html** endpoint to access swagger doc for see a detail of endpoint and play with it
 
 # How to Running Service
 
