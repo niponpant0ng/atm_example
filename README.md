@@ -5,6 +5,8 @@
 
 **spring boot starter test** use for testing webservice including a service that running inside
 
+**spring boot thymeleaf** use for render static page in resources/templates
+
 **h2** use for store notes data into memory using **spring boot starter data jpa**
 
 **lombok** use for reduce boilerplate code while coding such as setter/getter
