@@ -49,7 +49,7 @@ public class NoteControllerTest {
     }
 
     @Test
-    public void shouldNotInitNotesWhenBodyRequestIsEmpty() throws Exception {
+    public void shouldNotInitNotesWhenNotesAreEmpty() throws Exception {
         MockHttpServletRequestBuilder request = post("/notes")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
 
@@ -57,7 +57,16 @@ public class NoteControllerTest {
     }
 
     @Test
-    public void shouldNotInitNotesWhenAmountOfBodyRequestIsEmpty() throws Exception {
+    public void shouldNotInitNotesWhenNotesSizeIs0() throws Exception {
+        MockHttpServletRequestBuilder request = post("/notes")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString())
+                .content("{\"notes\": []}");
+
+        mvc.perform(request).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldNotInitNotesWhenSomeAmountOfNotesIsEmpty() throws Exception {
         MockHttpServletRequestBuilder request = post("/notes")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString())
                 .content("{\"notes\": [{\"counting\": 5}]}");
@@ -66,7 +75,7 @@ public class NoteControllerTest {
     }
 
     @Test
-    public void shouldNotInitNotesWhenCountingOfBodyRequestIsEmpty() throws Exception {
+    public void shouldNotInitNotesWhenSomeCountingOfNotesIsEmpty() throws Exception {
         MockHttpServletRequestBuilder request = post("/notes")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString())
                 .content("{\"notes\": [{\"amount\": 50}]}");
@@ -75,7 +84,7 @@ public class NoteControllerTest {
     }
 
     @Test
-    public void shouldNotInitNotesWhenAmountOfBodyRequestIsNotNumber() throws Exception {
+    public void shouldNotInitNotesWhenSomeAmountOfNotesIsNotNumber() throws Exception {
         MockHttpServletRequestBuilder request = post("/notes")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString())
                 .content("{\"notes\": [{\"amount\": \"xxx\", \"counting\": 5}]}");
@@ -84,7 +93,7 @@ public class NoteControllerTest {
     }
 
     @Test
-    public void shouldNotInitNotesWhenCountingOfBodyRequestIsNotNumber() throws Exception {
+    public void shouldNotInitNotesWhenSomeCountingOfNotesIsNotNumber() throws Exception {
         MockHttpServletRequestBuilder request = post("/notes")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString())
                 .content("{\"notes\": [{\"amount\": 100, \"counting\": 5}, {\"amount\": 50, \"counting\": \"xxx\"}]}");
@@ -93,7 +102,7 @@ public class NoteControllerTest {
     }
 
     @Test
-    public void shouldInitNotesWhenBodyRequestInCorrectFormat() throws Exception {
+    public void shouldInitNotesWhenNotesAreInCorrectFormat() throws Exception {
         List<Note> savedNotes = Collections.singletonList(new Note(100, 10));
         doReturn(savedNotes).when(noteService).initNotes(noteArgCaptor.capture());
 

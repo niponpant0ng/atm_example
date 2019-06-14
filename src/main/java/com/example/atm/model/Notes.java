@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -16,5 +17,6 @@ import java.util.List;
 public class Notes implements Serializable {
 
     @Valid
+    @Size(min = 1)
     List<Note> notes;
 }
