@@ -1,7 +1,7 @@
 package com.example.atm.service;
 
 import com.example.atm.config.exception.AvailableNoteEmptyException;
-import com.example.atm.config.exception.InValidDispenseAmount;
+import com.example.atm.config.exception.AvailableNoteNotCoverException;
 import com.example.atm.model.Note;
 import com.example.atm.reposistory.DispenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class DispenseService {
 
         Note leastNote = availableNotes.get(availableNotes.size() - 1);
         if(leastNote.getAmount() > amount) {
-            throw new InValidDispenseAmount();
+            throw new AvailableNoteNotCoverException();
         }
 
         List<Note> dispenseNotes = new ArrayList<>();
@@ -49,7 +49,7 @@ public class DispenseService {
         }
 
         if(amount > 0) {
-            throw new InValidDispenseAmount();
+            throw new AvailableNoteNotCoverException();
         }
 
         dispenseNotes.forEach(n -> dispenseRepository.decreaseNoteCounting(n.getAmount(), n.getCounting()));

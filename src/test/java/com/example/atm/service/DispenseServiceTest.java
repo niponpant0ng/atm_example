@@ -1,7 +1,7 @@
 package com.example.atm.service;
 
 import com.example.atm.config.exception.AvailableNoteEmptyException;
-import com.example.atm.config.exception.InValidDispenseAmount;
+import com.example.atm.config.exception.AvailableNoteNotCoverException;
 import com.example.atm.model.Note;
 import com.example.atm.reposistory.DispenseRepository;
 import junitx.framework.ListAssert;
@@ -30,7 +30,7 @@ public class DispenseServiceTest {
     @Mock
     private DispenseRepository dispenseRepository;
 
-    @Test(expected = InValidDispenseAmount.class)
+    @Test(expected = AvailableNoteNotCoverException.class)
     public void shouldInValidAmountWhenDispenseAmountLessThanLeastAmountOfAvailableNotes() {
         Integer dispenseAmount = 30;
         List<Note> notes = Arrays.asList(new Note(100, 5), new Note(50, 3));
@@ -110,7 +110,7 @@ public class DispenseServiceTest {
         ListAssert.assertContains(dispenseNotes, new Note(20, 3));
     }
 
-    @Test(expected = InValidDispenseAmount.class)
+    @Test(expected = AvailableNoteNotCoverException.class)
     public void shouldInValidAmountWhenAvailableNotesNotCoverDispenseAmount() {
         Integer dispenseAmount = 130;
         List<Note> notes = Arrays.asList(new Note(100, 5), new Note(50, 3));
