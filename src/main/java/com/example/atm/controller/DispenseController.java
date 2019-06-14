@@ -2,6 +2,7 @@ package com.example.atm.controller;
 
 import com.example.atm.model.Notes;
 import com.example.atm.service.DispenseService;
+import com.example.atm.service.NoteService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,13 +19,16 @@ public class DispenseController {
 
     private DispenseService dispenseService;
 
+    private NoteService noteService;
+
     @Autowired
-    public DispenseController(DispenseService dispenseService) {
+    public DispenseController(DispenseService dispenseService, NoteService noteService) {
         this.dispenseService = dispenseService;
+        this.noteService = noteService;
     }
 
     @PostMapping("/{amount}")
     public Notes dispense(@PathVariable("amount") @Min(value = 1) Integer amount) {
-        return new Notes(dispenseService.dispense(amount));
+        return new Notes(dispenseService.dispense(noteService.getAvailableNotes(), amount));
     }
 }

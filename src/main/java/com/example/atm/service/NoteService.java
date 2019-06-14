@@ -1,5 +1,6 @@
 package com.example.atm.service;
 
+import com.example.atm.config.exception.AvailableNoteEmptyException;
 import com.example.atm.model.Note;
 import com.example.atm.reposistory.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Service
 public class NoteService {
+
     private NoteRepository noteRepository;
 
     @Autowired
@@ -24,5 +26,14 @@ public class NoteService {
 
     public List<Note> getNotes() {
         return noteRepository.findAll();
+    }
+
+    public List<Note> getAvailableNotes() {
+        List<Note> availableNotes = noteRepository.findAvailableNotes();
+        if(availableNotes.isEmpty()) {
+            throw new AvailableNoteEmptyException();
+        }
+
+        return availableNotes;
     }
 }

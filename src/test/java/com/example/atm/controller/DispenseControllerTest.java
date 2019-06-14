@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.doReturn;
@@ -36,6 +37,9 @@ public class DispenseControllerTest {
 
     @MockBean
     private DispenseService dispenseService;
+
+    @MockBean
+    private NoteService noteService;
 
     @Autowired
     private MockMvc mvc;
@@ -61,7 +65,7 @@ public class DispenseControllerTest {
     @Test
     public void shouldNotDispenseWhenAvailableNotesAreEmpty() throws Exception {
         Integer amount = 150;
-        doThrow(new AvailableNoteEmptyException()).when(dispenseService).dispense(amount);
+        doThrow(new AvailableNoteEmptyException()).when(noteService).getAvailableNotes();
 
         MockHttpServletRequestBuilder request = post(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
@@ -74,7 +78,9 @@ public class DispenseControllerTest {
     @Test
     public void shouldNotDispenseWhenAvailableNotesNotCoverAmount() throws Exception {
         Integer amount = 150;
-        doThrow(new AvailableNoteNotCoverException()).when(dispenseService).dispense(amount);
+        List<Note> availableNotes = Collections.singletonList(new Note(100, 10));
+        doReturn(availableNotes).when(noteService).getAvailableNotes();
+        doThrow(new AvailableNoteNotCoverException()).when(dispenseService).dispense(availableNotes, amount);
 
         MockHttpServletRequestBuilder request = post(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());
@@ -88,7 +94,9 @@ public class DispenseControllerTest {
     public void shouldDispenseWhenAvailableNotesCoverAmount() throws Exception {
         Integer amount = 150;
         List<Note> notes = Arrays.asList(new Note(100, 1), new Note(50, 1));
-        doReturn(notes).when(dispenseService).dispense(amount);
+        List<Note> availableNotes = Collections.singletonList(new Note(100, 10));
+        doReturn(availableNotes).when(noteService).getAvailableNotes();
+        doReturn(notes).when(dispenseService).dispense(availableNotes, amount);
 
         MockHttpServletRequestBuilder request = post(String.format(URL, amount))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString());

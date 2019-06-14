@@ -22,8 +22,7 @@ public class DispenseService {
     }
 
     @Transactional
-    public List<Note> dispense(Integer amount) {
-        List<Note> availableNotes = dispenseRepository.getAvailableNotes();
+    public List<Note> dispense(List<Note> availableNotes, Integer amount) {
         if(availableNotes.isEmpty()) {
             throw new AvailableNoteEmptyException();
         }

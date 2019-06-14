@@ -17,7 +17,6 @@ import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -34,27 +33,24 @@ public class DispenseServiceTest {
     public void shouldInValidAmountWhenDispenseAmountLessThanLeastAmountOfAvailableNotes() {
         Integer dispenseAmount = 30;
         List<Note> notes = Arrays.asList(new Note(100, 5), new Note(50, 3));
-        doReturn(notes).when(dispenseRepository).getAvailableNotes();
 
-        dispenseService.dispense(dispenseAmount);
+        dispenseService.dispense(notes, dispenseAmount);
     }
 
     @Test(expected = AvailableNoteEmptyException.class)
     public void ShouldAvailableNoteEmptyWhenAvailableNotesAreEmpty() {
         Integer dispenseAmount = 30;
         List<Note> notes = Collections.emptyList();
-        doReturn(notes).when(dispenseRepository).getAvailableNotes();
 
-        dispenseService.dispense(dispenseAmount);
+        dispenseService.dispense(notes, dispenseAmount);
     }
 
     @Test
     public void shouldDispenseWhenAvailableNotesCoverDispenseAmountAndCountingOfEachNoteIsCovering() {
         Integer dispenseAmount = 170;
         List<Note> notes = Arrays.asList(new Note(100, 5), new Note(50, 2), new Note(20, 3));
-        doReturn(notes).when(dispenseRepository).getAvailableNotes();
 
-        List<Note> dispenseNotes = dispenseService.dispense(dispenseAmount);
+        List<Note> dispenseNotes = dispenseService.dispense(notes, dispenseAmount);
 
         verify(dispenseRepository, times(1)).decreaseNoteCounting(100, 1);
         verify(dispenseRepository, times(1)).decreaseNoteCounting(50, 1);
@@ -69,9 +65,8 @@ public class DispenseServiceTest {
     public void shouldDispenseWhenAvailableNotesCoverDispenseAmountBeforeLatestOfAvailableNotesCovering() {
         Integer dispenseAmount = 150;
         List<Note> notes = Arrays.asList(new Note(100, 5), new Note(50, 2), new Note(20, 3));
-        doReturn(notes).when(dispenseRepository).getAvailableNotes();
 
-        List<Note> dispenseNotes = dispenseService.dispense(dispenseAmount);
+        List<Note> dispenseNotes = dispenseService.dispense(notes, dispenseAmount);
 
         verify(dispenseRepository, times(1)).decreaseNoteCounting(100, 1);
         verify(dispenseRepository, times(1)).decreaseNoteCounting(50, 1);
@@ -84,9 +79,8 @@ public class DispenseServiceTest {
     public void shouldDispenseWhenAvailableNotesCoverDispenseAmountAndEachAvailableNoteBeforeLatestNotesNotCovering() {
         Integer dispenseAmount = 50;
         List<Note> notes = Arrays.asList(new Note(100, 5), new Note(50, 3));
-        doReturn(notes).when(dispenseRepository).getAvailableNotes();
 
-        List<Note> dispenseNotes = dispenseService.dispense(dispenseAmount);
+        List<Note> dispenseNotes = dispenseService.dispense(notes, dispenseAmount);
 
         verify(dispenseRepository, times(1)).decreaseNoteCounting(50, 1);
         assertThat(dispenseNotes.size(), is(1));
@@ -97,9 +91,8 @@ public class DispenseServiceTest {
     public void shouldDispenseWhenAvailableNotesCoverDispenseAmountAndCountingOfEachNoteIsNotCoveringAtAll() {
         Integer dispenseAmount = 310;
         List<Note> notes = Arrays.asList(new Note(100, 2), new Note(50, 1), new Note(20, 3));
-        doReturn(notes).when(dispenseRepository).getAvailableNotes();
 
-        List<Note> dispenseNotes = dispenseService.dispense(dispenseAmount);
+        List<Note> dispenseNotes = dispenseService.dispense(notes, dispenseAmount);
 
         verify(dispenseRepository, times(1)).decreaseNoteCounting(100, 2);
         verify(dispenseRepository, times(1)).decreaseNoteCounting(50, 1);
@@ -114,8 +107,7 @@ public class DispenseServiceTest {
     public void shouldInValidAmountWhenAvailableNotesNotCoverDispenseAmount() {
         Integer dispenseAmount = 130;
         List<Note> notes = Arrays.asList(new Note(100, 5), new Note(50, 3));
-        doReturn(notes).when(dispenseRepository).getAvailableNotes();
 
-        dispenseService.dispense(dispenseAmount);
+        dispenseService.dispense(notes, dispenseAmount);
     }
 }
