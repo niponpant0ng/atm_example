@@ -31,7 +31,7 @@
         axios.post(`/dispense/${amount}`)
           .then(function (resp) {
             $("#dispenseAmount").val('');
-            $("#dispenseDetail").append('<div class="row"><div class="col-lg-2 offset-lg-3">Dispense Detail:</div></div>');
+            $("#dispenseDetail").html('<div class="row"><div class="col-lg-2 offset-lg-3">Dispense Detail:</div></div>');
 
             if(resp.data.notes) {
               $('#dispenseDetail').append();
